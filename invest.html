@@ -456,6 +456,17 @@
             box-shadow: var(--shadow-md);
         }
 
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #d97706;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
         .btn-icon {
             width: 36px;
             height: 36px;
@@ -1106,6 +1117,12 @@
             transition: opacity 0.3s ease;
             mix-blend-mode: screen;
         }
+
+        .search-container {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+        }
     </style>
 </head>
 <body>
@@ -1199,7 +1216,7 @@
     <div class="card skins-table">
         <div class="card-glow"></div>
         <h3>Мои скины</h3>
-        <div style="margin-bottom: var(--spacing-md); display: flex; justify-content: space-between; align-items: center;">
+        <div class="search-container">
             <div>
                 <input type="text" id="searchInput" class="form-control" placeholder="Поиск по названию..." style="width: 250px;">
             </div>
@@ -1237,6 +1254,21 @@
     <div class="card skins-table">
         <div class="card-glow"></div>
         <h3>Проданные скины</h3>
+        <div class="search-container">
+            <div>
+                <input type="text" id="soldSearchInput" class="form-control" placeholder="Поиск по названию..." style="width: 250px;">
+            </div>
+            <div>
+                <select id="soldSortSelect" class="form-control">
+                    <option value="date-desc">Сначала новые</option>
+                    <option value="date-asc">Сначала старые</option>
+                    <option value="name-asc">По названию (А-Я)</option>
+                    <option value="name-desc">По названию (Я-А)</option>
+                    <option value="profit-desc">По прибыли (убыв.)</option>
+                    <option value="profit-asc">По прибыли (возр.)</option>
+                </select>
+            </div>
+        </div>
         <table class="table">
             <thead>
                 <tr>
@@ -1291,6 +1323,82 @@
         <div class="modal-footer">
             <button onclick="closeModal('addSkinModal')" class="btn btn-secondary">Отмена</button>
             <button onclick="addSkin()" class="btn btn-primary">Добавить</button>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Skin Modal -->
+<div id="editSkinModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Редактировать скин</h3>
+            <span class="close" onclick="closeModal('editSkinModal')">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="editSkinName">Название скина</label>
+                <input type="text" id="editSkinName" class="form-control" placeholder="AWP | Asiimov (Field-Tested)" required>
+            </div>
+            <div class="form-group">
+                <label for="editPurchasePrice">Цена покупки ($)</label>
+                <input type="number" id="editPurchasePrice" class="form-control" placeholder="0.00" step="0.01" min="0" required>
+            </div>
+            <div class="form-group">
+                <label for="editCurrentPrice">Текущая цена ($)</label>
+                <input type="number" id="editCurrentPrice" class="form-control" placeholder="0.00" step="0.01" min="0" required>
+            </div>
+            <div class="form-group">
+                <label for="editPurchaseDate">Дата покупки</label>
+                <input type="date" id="editPurchaseDate" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="editQuantity">Количество</label>
+                <input type="number" id="editQuantity" class="form-control" placeholder="1" min="1" value="1" required>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeModal('editSkinModal')" class="btn btn-secondary">Отмена</button>
+            <button onclick="updateSkin()" class="btn btn-primary">Сохранить</button>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Sold Skin Modal -->
+<div id="editSoldSkinModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Редактировать проданный скин</h3>
+            <span class="close" onclick="closeModal('editSoldSkinModal')">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="editSoldSkinName">Название скина</label>
+                <input type="text" id="editSoldSkinName" class="form-control" placeholder="AWP | Asiimov (Field-Tested)" required>
+            </div>
+            <div class="form-group">
+                <label for="editSoldPurchasePrice">Цена покупки ($)</label>
+                <input type="number" id="editSoldPurchasePrice" class="form-control" placeholder="0.00" step="0.01" min="0" required>
+            </div>
+            <div class="form-group">
+                <label for="editSoldSellPrice">Цена продажи ($)</label>
+                <input type="number" id="editSoldSellPrice" class="form-control" placeholder="0.00" step="0.01" min="0" required>
+            </div>
+            <div class="form-group">
+                <label for="editSoldPurchaseDate">Дата покупки</label>
+                <input type="date" id="editSoldPurchaseDate" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="editSoldSellDate">Дата продажи</label>
+                <input type="date" id="editSoldSellDate" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="editSoldQuantity">Количество</label>
+                <input type="number" id="editSoldQuantity" class="form-control" placeholder="1" min="1" value="1" required>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeModal('editSoldSkinModal')" class="btn btn-secondary">Отмена</button>
+            <button onclick="updateSoldSkin()" class="btn btn-primary">Сохранить</button>
         </div>
     </div>
 </div>
@@ -1350,6 +1458,7 @@
     let soldSkins = JSON.parse(localStorage.getItem('cs2SoldSkins')) || [];
     let chart;
     let currentSkinId = null;
+    let currentSoldSkinId = null;
     let confirmCallback = null;
     let currentCurrency = 'USD';
     
@@ -1396,6 +1505,10 @@
         // Add event listeners
         document.getElementById('searchInput').addEventListener('input', renderSkinsTable);
         document.getElementById('sortSelect').addEventListener('change', renderSkinsTable);
+        
+        // Add event listeners for sold skins search and sort
+        document.getElementById('soldSearchInput').addEventListener('input', renderSoldSkinsTable);
+        document.getElementById('soldSortSelect').addEventListener('change', renderSoldSkinsTable);
         
         // Add event listener for sell price to update profit preview
         document.getElementById('sellPrice').addEventListener('input', updateProfitPreview);
@@ -1679,6 +1792,146 @@
         createSparklesAround(document.querySelector('.add-btn'), 15);
     }
     
+    function openEditSkinModal(skinId) {
+        currentSkinId = skinId;
+        const skin = skins.find(s => s.id === skinId);
+        
+        if (!skin) return;
+        
+        document.getElementById('editSkinName').value = skin.name;
+        document.getElementById('editPurchasePrice').value = skin.purchasePrice.toFixed(2);
+        document.getElementById('editCurrentPrice').value = skin.currentPrice.toFixed(2);
+        document.getElementById('editPurchaseDate').value = skin.purchaseDate;
+        document.getElementById('editQuantity').value = skin.quantity;
+        
+        document.getElementById('editSkinModal').style.display = 'block';
+        
+        // Animate modal appearance
+        const modalContent = document.querySelector('#editSkinModal .modal-content');
+        gsap.fromTo(modalContent, 
+            { opacity: 0, y: 20, scale: 0.95 },
+            { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "back.out(1.7)" }
+        );
+    }
+    
+    function updateSkin() {
+        const skin = skins.find(s => s.id === currentSkinId);
+        
+        if (!skin) {
+            closeModal('editSkinModal');
+            return;
+        }
+        
+        const skinName = document.getElementById('editSkinName').value;
+        const purchasePrice = parseFloat(document.getElementById('editPurchasePrice').value);
+        const currentPrice = parseFloat(document.getElementById('editCurrentPrice').value);
+        const purchaseDate = document.getElementById('editPurchaseDate').value;
+        const quantity = parseInt(document.getElementById('editQuantity').value);
+        
+        if (!skinName || isNaN(purchasePrice) || isNaN(currentPrice) || !purchaseDate || isNaN(quantity) || quantity < 1) {
+            showNotification('Пожалуйста, заполните все поля корректно', 'error');
+            return;
+        }
+        
+        // Update skin properties
+        skin.name = skinName;
+        skin.purchasePrice = purchasePrice;
+        skin.currentPrice = currentPrice;
+        skin.purchaseDate = purchaseDate;
+        skin.quantity = quantity;
+        skin.lastUpdated = new Date().toISOString();
+        
+        saveSkins();
+        closeModal('editSkinModal');
+        
+        // Update UI
+        renderSkinsTable();
+        updateDashboard();
+        
+        // Show notification
+        showNotification(`Скин "${skinName}" обновлен`, 'success');
+        
+        // Create sparkles effect
+        createSparklesAround(document.querySelector('.btn-warning'), 15);
+    }
+    
+    function openEditSoldSkinModal(skinId) {
+        currentSoldSkinId = skinId;
+        const skin = soldSkins.find(s => s.id === skinId);
+        
+        if (!skin) return;
+        
+        document.getElementById('editSoldSkinName').value = skin.name;
+        document.getElementById('editSoldPurchasePrice').value = skin.purchasePrice.toFixed(2);
+        document.getElementById('editSoldSellPrice').value = skin.sellPrice.toFixed(2);
+        document.getElementById('editSoldPurchaseDate').value = skin.purchaseDate;
+        document.getElementById('editSoldSellDate').value = skin.sellDate;
+        document.getElementById('editSoldQuantity').value = skin.quantity;
+        
+        document.getElementById('editSoldSkinModal').style.display = 'block';
+        
+        // Animate modal appearance
+        const modalContent = document.querySelector('#editSoldSkinModal .modal-content');
+        gsap.fromTo(modalContent, 
+            { opacity: 0, y: 20, scale: 0.95 },
+            { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "back.out(1.7)" }
+        );
+    }
+    
+    function updateSoldSkin() {
+        const skin = soldSkins.find(s => s.id === currentSoldSkinId);
+        
+        if (!skin) {
+            closeModal('editSoldSkinModal');
+            return;
+        }
+        
+        const skinName = document.getElementById('editSoldSkinName').value;
+        const purchasePrice = parseFloat(document.getElementById('editSoldPurchasePrice').value);
+        const sellPrice = parseFloat(document.getElementById('editSoldSellPrice').value);
+        const purchaseDate = document.getElementById('editSoldPurchaseDate').value;
+        const sellDate = document.getElementById('editSoldSellDate').value;
+        const quantity = parseInt(document.getElementById('editSoldQuantity').value);
+        
+        if (!skinName || isNaN(purchasePrice) || isNaN(sellPrice) || !purchaseDate || !sellDate || isNaN(quantity) || quantity < 1) {
+            showNotification('Пожалуйста, заполните все поля корректно', 'error');
+            return;
+        }
+        
+        // Calculate profit
+        const profit = (sellPrice - purchasePrice) * quantity;
+        const profitPercentage = ((sellPrice / purchasePrice) - 1) * 100;
+        
+        // Calculate days held
+        const purchaseDateTime = new Date(purchaseDate);
+        const sellDateTime = new Date(sellDate);
+        const daysHeld = Math.floor((sellDateTime - purchaseDateTime) / (1000 * 60 * 60 * 24));
+        
+        // Update skin properties
+        skin.name = skinName;
+        skin.purchasePrice = purchasePrice;
+        skin.sellPrice = sellPrice;
+        skin.purchaseDate = purchaseDate;
+        skin.sellDate = sellDate;
+        skin.quantity = quantity;
+        skin.profit = profit;
+        skin.profitPercentage = profitPercentage;
+        skin.daysHeld = daysHeld;
+        
+        saveSkins();
+        closeModal('editSoldSkinModal');
+        
+        // Update UI
+        renderSoldSkinsTable();
+        updateDashboard();
+        
+        // Show notification
+        showNotification(`Проданный скин "${skinName}" обновлен`, 'success');
+        
+        // Create sparkles effect
+        createSparklesAround(document.querySelector('.btn-warning'), 15);
+    }
+    
     function updateProfitPreview() {
         if (!currentSkinId) return;
         
@@ -1795,8 +2048,14 @@
         
         soldSkins.push(soldSkin);
         
-        // We don't remove the skin from inventory as requested
-        // Just update the UI to show the sale
+        // Update or remove the skin from inventory based on quantity sold
+        if (sellQuantity >= skin.quantity) {
+            // Remove the skin from inventory if all are sold
+            skins = skins.filter(s => s.id !== skin.id);
+        } else {
+            // Update the quantity if only some are sold
+            skin.quantity -= sellQuantity;
+        }
         
         saveSkins();
         closeModal('sellModal');
@@ -1898,6 +2157,9 @@
                     <button onclick="openSellModal('${skin.id}')" class="btn btn-success btn-icon" title="Продать">
                         <ion-icon name="cash-outline"></ion-icon>
                     </button>
+                    <button onclick="openEditSkinModal('${skin.id}')" class="btn btn-warning btn-icon" title="Редактировать">
+                        <ion-icon name="create-outline"></ion-icon>
+                    </button>
                     <button onclick="deleteSkin('${skin.id}')" class="btn btn-danger btn-icon" title="Удалить">
                         <ion-icon name="trash-outline"></ion-icon>
                     </button>
@@ -1910,8 +2172,18 @@
     
     function renderSoldSkinsTable() {
         const tableBody = document.getElementById('soldSkinsTableBody');
+        const searchTerm = document.getElementById('soldSearchInput').value.toLowerCase();
+        const sortOption = document.getElementById('soldSortSelect').value;
         
-        if (soldSkins.length === 0) {
+        // Filter sold skins
+        let filteredSoldSkins = soldSkins.filter(skin => 
+            skin.name.toLowerCase().includes(searchTerm)
+        );
+        
+        // Sort sold skins
+        filteredSoldSkins = sortSoldSkins(filteredSoldSkins, sortOption);
+        
+        if (filteredSoldSkins.length === 0) {
             tableBody.innerHTML = `
                 <tr>
                     <td colspan="8" style="text-align: center;">Нет проданных скинов</td>
@@ -1922,10 +2194,7 @@
         
         tableBody.innerHTML = '';
         
-        // Sort sold skins by sell date (newest first)
-        const sortedSoldSkins = [...soldSkins].sort((a, b) => new Date(b.sellDate) - new Date(a.sellDate));
-        
-        sortedSoldSkins.forEach(skin => {
+        filteredSoldSkins.forEach(skin => {
             const isProfitable = skin.profit >= 0;
             
             const row = document.createElement('tr');
@@ -1947,6 +2216,9 @@
                     </span>
                 </td>
                 <td>
+                    <button onclick="openEditSoldSkinModal('${skin.id}')" class="btn btn-warning btn-icon" title="Редактировать">
+                        <ion-icon name="create-outline"></ion-icon>
+                    </button>
                     <button onclick="deleteSoldSkin('${skin.id}')" class="btn btn-danger btn-icon" title="Удалить запись">
                         <ion-icon name="trash-outline"></ion-icon>
                     </button>
@@ -1983,6 +2255,25 @@
                     const profitB = (b.currentPrice - b.purchasePrice) * b.quantity;
                     return profitA - profitB;
                 });
+            default:
+                return skinsList;
+        }
+    }
+    
+    function sortSoldSkins(skinsList, sortOption) {
+        switch (sortOption) {
+            case 'date-desc':
+                return [...skinsList].sort((a, b) => new Date(b.sellDate) - new Date(a.sellDate));
+            case 'date-asc':
+                return [...skinsList].sort((a, b) => new Date(a.sellDate) - new Date(b.sellDate));
+            case 'name-asc':
+                return [...skinsList].sort((a, b) => a.name.localeCompare(b.name));
+            case 'name-desc':
+                return [...skinsList].sort((a, b) => b.name.localeCompare(a.name));
+            case 'profit-desc':
+                return [...skinsList].sort((a, b) => b.profit - a.profit);
+            case 'profit-asc':
+                return [...skinsList].sort((a, b) => a.profit - b.profit);
             default:
                 return skinsList;
         }
@@ -2096,6 +2387,7 @@
             onComplete: () => {
                 modal.style.display = 'none';
                 currentSkinId = null;
+                currentSoldSkinId = null;
             }
         });
     }
